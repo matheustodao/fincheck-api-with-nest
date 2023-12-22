@@ -37,7 +37,7 @@ model BankAccount {
   color          String
   type           BankAccountType
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("bank_accounts")
 }
