@@ -31,7 +31,7 @@ enum BankAccountType {
 
 model BankAccount {
   id             String          @id @default(uuid()) @db.Uuid
-  userId         String          @db.Uuid
+  userId         String          @map("user_id") @db.Uuid
   name           String
   initialBalance Float           @map("initial_balance")
   color          String
