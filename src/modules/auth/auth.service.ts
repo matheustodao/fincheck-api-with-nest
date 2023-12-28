@@ -5,11 +5,11 @@ import {
 } from '@nestjs/common';
 import { compare, hash } from 'bcryptjs';
 
-import { AuthenticateDto } from './dto/authenticate.dto';
+import { SignInDto } from './dto/sign-in.dto';
 import { UsersRepositories } from 'src/shared/database/repositories/users.repositories';
 import { JwtService } from '@nestjs/jwt';
-import { RegisterUserDto } from './dto/register-user.dto';
 import { CategoryConstants } from 'src/shared/constants/category.constants';
+import { SignUpDto } from './dto/sign-up.dto';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +18,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async authenticate({ email, password }: AuthenticateDto) {
+  async signIn({ email, password }: SignInDto) {
     const user = await this.usersRepo.findByEmail(email);
 
     if (!user) {
@@ -36,7 +36,7 @@ export class AuthService {
     return { ...user, accessToken, password: undefined };
   }
 
-  async register({ name, email, password }: RegisterUserDto) {
+  async signUp({ name, email, password }: SignUpDto) {
     const emailAlreadyTaken = await this.usersRepo.findByEmail(email);
 
     if (emailAlreadyTaken) {
