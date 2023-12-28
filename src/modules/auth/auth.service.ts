@@ -3,10 +3,15 @@ import { compare } from 'bcryptjs';
 
 import { AuthenticateDto } from './dto/authenticate.dto';
 import { UsersRepositories } from 'src/shared/database/repositories/users.repositories';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersRepo: UsersRepositories) {}
+  constructor(
+    private readonly usersRepo: UsersRepositories,
+    private readonly jwtService: JwtService,
+  ) {}
+
   async authenticate({ email, password }: AuthenticateDto) {
     const user = await this.usersRepo.findByEmail(email);
 
@@ -20,6 +25,8 @@ export class AuthService {
       throw new UnauthorizedException('Invalid Credentials');
     }
 
-    return user;
+    const accessToken = await this.jwtService.signAsync({ sub: user.id });
+
+    return { ...user, accessToken };
   }
 }
