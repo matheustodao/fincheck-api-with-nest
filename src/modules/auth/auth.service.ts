@@ -31,9 +31,9 @@ export class AuthService {
       throw new UnauthorizedException('Invalid Credentials');
     }
 
-    const accessToken = await this.jwtService.signAsync({ sub: user.id });
+    const accessToken = await this.generateAccessToken(user.id);
 
-    return { ...user, accessToken };
+    return { ...user, accessToken, password: undefined };
   }
 
   async register({ name, email, password }: RegisterUserDto) {
@@ -64,6 +64,16 @@ export class AuthService {
       },
     });
 
-    return created;
+    const accessToken = await this.generateAccessToken(created.id);
+
+    return {
+      ...created,
+      accessToken,
+      password: undefined,
+    };
+  }
+
+  private generateAccessToken(userId: string) {
+    return this.jwtService.signAsync({ sub: userId });
   }
 }
