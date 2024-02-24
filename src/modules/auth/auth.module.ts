@@ -7,6 +7,7 @@ import { jwtConstants } from 'src/shared/constants/jwt.constants';
 @Module({
   imports: [
     JwtModule.register({
+      global: true,
       secret: jwtConstants.secret,
       signOptions: { expiresIn: jwtConstants.expiresIn },
     }),
