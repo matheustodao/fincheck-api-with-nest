@@ -5,12 +5,17 @@ export class UsersService {
   constructor(private readonly UsersRepo: UsersRepositories) {}
 
   async getUserById(userId: string) {
-    const user = await this.UsersRepo.findById(userId);
+    const user = await this.UsersRepo.findById(userId, {
+      include: {
+        category: {
+          distinct: 'id',
+        },
+      },
+    });
 
     return {
       ...user,
       password: undefined,
-      id: undefined,
     };
   }
 }
