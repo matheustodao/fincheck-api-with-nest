@@ -15,4 +15,16 @@ export class UsersRepositories {
       where: { email },
     });
   }
+
+  findById(id: string, options?: Partial<Prisma.UserFindUniqueArgs>) {
+    const optionsParsed = {
+      where: { id },
+    } as Prisma.UserFindUniqueArgs;
+
+    if (typeof options !== 'undefined') {
+      Object.assign(optionsParsed, options);
+    }
+
+    return this.prismaService.user.findUnique(optionsParsed);
+  }
 }
